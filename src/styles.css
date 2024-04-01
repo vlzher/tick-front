@@ -1,0 +1,60 @@
+.board-row:after {
+    clear: both;
+    content: '';
+    display: table;
+}
+
+.square {
+    padding: 0;
+    color: #1a1a1a;
+    background: #fff;
+    border: 1px solid #999;
+    float: left;
+    font-size: 10vw;
+    font-weight: bold;
+    line-height: 34px;
+    height: 12vw;
+    margin-right: -1px;
+    margin-top: -1px;
+    text-align: center;
+    width: 12vw;
+}
+
+.status {
+    margin-bottom: 10px;
+}
+
+
+.board{
+    width: 36vw;
+    aspect-ratio: 1;
+}
+
+.username-container {
+    display: flex;
+    align-items: center;
+}
+
+.username-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.enter-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.enter-button:hover {
+    background-color: #0056b3;
+}
+
+.enter-button:active {
+    background-color: #004080;
+}
