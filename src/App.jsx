@@ -85,7 +85,7 @@ function App() {
     }, [currentMessage]);
 
     useEffect(() => {
-        socket.current = new WebSocket('ws://localhost:8080');
+        socket.current = new WebSocket(`ws://${window.location.hostname}:8080`);
         socket.current.onmessage = event => {
             const message = JSON.parse(event.data);
             setCurrentMessage(message)
