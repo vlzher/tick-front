@@ -12,6 +12,13 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     host: true,
+    proxy: {
+      '/socket': {
+        target: 'ws://backend:8080',
+        changeOrigin: true,
+        ws: true
+      }
+    },
     origin: "http://0.0.0.0:5173",
   },
 });
