@@ -14,8 +14,6 @@ function App() {
     const primarySocketUrl = `ws://${window.location.hostname}:5173/socket`;
     const backupSocketUrl = `ws://${window.location.hostname}:5173/socket-backup`;
 
-    const socket = useRef(connectWebSocket(primarySocketUrl));
-
     const connectWebSocket = (url) => {
         const ws = new WebSocket(url);
 
@@ -32,6 +30,9 @@ function App() {
 
         return ws;
     };
+
+
+    const socket = useRef();
 
     const handleMove = (move) => {
         setIsMyMove(true)
@@ -106,12 +107,7 @@ function App() {
     }, [currentMessage]);
 
     useEffect(() => {
-        socket.current = new WebSocket(`ws://${window.location.hostname}:5173/socket`);
-        socket.current.onmessage = event => {
-            const message = JSON.parse(event.data);
-            setCurrentMessage(message)
-
-        };
+        socket.current = connectWebSocket(primarySocketUrl)
 
         return () => {
             if(gameId) socket.current.send(JSON.stringify({type: "gameEnd", gameID: gameId}))
