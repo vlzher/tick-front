@@ -9,9 +9,30 @@ function App() {
     const [isX, setIsX] = useState(null);
     const [board, setBoard] = useState(new Array(9).fill(-1));
     const [result, setResult] = useState(null)
-    const socket = useRef();
     const [currentMessage, setCurrentMessage] = useState();
     const [isMyMove, setIsMyMove] = useState(null);
+    const primarySocketUrl = `ws://${window.location.hostname}:5173/socket`;
+    const backupSocketUrl = `ws://${window.location.hostname}:5173/socket-backup`;
+
+    const socket = useRef(connectWebSocket(primarySocketUrl));
+
+    const connectWebSocket = (url) => {
+        const ws = new WebSocket(url);
+
+        ws.onmessage = event => {
+            const message = JSON.parse(event.data);
+            setCurrentMessage(message);
+        };
+
+        ws.onclose = () => {
+            if (ws === socket.current && url === primarySocketUrl) {
+                socket.current = connectWebSocket(backupSocketUrl);
+            }
+        };
+
+        return ws;
+    };
+
     const handleMove = (move) => {
         setIsMyMove(true)
         const newBoard = [...board]

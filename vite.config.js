@@ -17,7 +17,12 @@ export default defineConfig({
         target: 'ws://localhost:8080',
         changeOrigin: true,
         ws: true
-      }
+      },
+      '/socket-backup': {
+        target: 'ws://backend:8080',
+        changeOrigin: true,
+        ws: true
+      },
     },
     origin: "http://0.0.0.0:5173",
   },
