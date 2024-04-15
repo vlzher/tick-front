@@ -11,8 +11,8 @@ function App() {
     const [result, setResult] = useState(null)
     const [currentMessage, setCurrentMessage] = useState();
     const [isMyMove, setIsMyMove] = useState(null);
-    const backupSocketUrl = `ws://${window.location.hostname}:5173/socket`;
-    const primarySocketUrl = `ws://${window.location.hostname}:5173/socket-backup`;
+    const primarySocketUrl = `ws://${window.location.hostname}:5173/socket`;
+    const backupSocketUrl= `ws://${window.location.hostname}:8080`;
 
     const connectWebSocket = (url) => {
         const ws = new WebSocket(url);
