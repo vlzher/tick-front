@@ -10,7 +10,7 @@ function App() {
     const [board, setBoard] = useState(new Array(9).fill(-1));
     const [result, setResult] = useState(null)
     const [currentMessage, setCurrentMessage] = useState();
-    const [isMyMove, setIsMyMove] = useState(null);backupSocketUrl
+    const [isMyMove, setIsMyMove] = useState(null);
     const backupSocketUrl = `ws://${window.location.hostname}:5173/socket`;
     const primarySocketUrl = `ws://${window.location.hostname}:5173/socket-backup`;
 
