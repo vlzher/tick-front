@@ -1,19 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import UsernameInput from "./UsernameInput.jsx";
 import TickTackBoard from "./TickTackBoard.jsx";
 import './App.css'
 import {useNavigate} from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
-const Game = ({socket,currentMessage}) => {
+const Game = ({socket,currentMessage,setCurrentMessage}) => {
 
     const [gameId, setGameId] = useState(null);
+    const [isStarted, setIsStarted] = useState(null)
     const [isX, setIsX] = useState(null);
     const [board, setBoard] = useState(new Array(9).fill(-1));
     const [result, setResult] = useState(null)
     const navigate = useNavigate();
     const [isMyMove, setIsMyMove] = useState(null);
     const [lastMessage, setLastMessage] = useState(null);
+
+
 
 
     useEffect(() => {
@@ -25,6 +27,7 @@ const Game = ({socket,currentMessage}) => {
         }
         if(currentMessage.type === "refresh_success"){
             localStorage.setItem("accessToken", currentMessage.accessToken)
+            console.log("last message", lastMessage)
             socket.current.send(lastMessage)
         }
         if(currentMessage.type === "refresh_failed"){
@@ -37,17 +40,21 @@ const Game = ({socket,currentMessage}) => {
         }
     }, [currentMessage]);
 
-    useEffect(() => {
+    function handleStartGame(){
+        setIsStarted(true)
         const accessToken = localStorage.getItem("accessToken");
         const username = localStorage.getItem("username");
         if(!accessToken || !username|| !socket.current) navigate("/")
         const message = JSON.stringify({type: "start_game", username, access_token: accessToken});
-        console.log(lastMessage === message)
-        console.log(lastMessage)
-        if(lastMessage === message) return;
         setLastMessage(message)
         socket.current.send(message)
-    },[]);
+    }
+    function handleLogout(){
+        localStorage.setItem("accessToken", "")
+        localStorage.setItem("refreshToken", "")
+        setCurrentMessage({type: "logout"})
+        navigate("/")
+    }
 
     const handleMove = (move) => {
         setIsMyMove(true)
@@ -58,6 +65,7 @@ const Game = ({socket,currentMessage}) => {
         setResult(checkWinner(newBoard))
     }
     const makeMove = (index) =>{
+        console.log(index)
         setIsMyMove(false)
         const username = localStorage.getItem("username");
         const accessToken = localStorage.getItem("accessToken");
@@ -81,7 +89,7 @@ const Game = ({socket,currentMessage}) => {
             setBoard(new Array(9).fill(-1))
             setGameId(null);
             setTimeout(() => setResult(null), 2000)
-            navigate("/")
+            setIsStarted(false)
         }
     }, [result]);
 
@@ -108,8 +116,14 @@ const Game = ({socket,currentMessage}) => {
         if(result === 1) return (<div>Win</div>)
         if(result === -1) return (<div>Lose</div>)
         if(result === 0) return (<div>Draw</div>)
-        if(!gameId) return (<div>Loading...</div>)
-        return(<TickTackBoard board={board} handleClick={makeMove} isMyMove={isMyMove}/>)
+        if(!isStarted) return (<>
+            <button onClick={() => handleStartGame()} className="enter-button">Start Game</button>
+            <button onClick={() => handleLogout()} className="enter-button">Logout</button>
+
+
+        </>)
+        if (!gameId) return (<div>Loading...</div>)
+        return (<TickTackBoard board={board} handleClick={makeMove} isMyMove={isMyMove}/>)
     }
 
     useEffect(() => {
@@ -133,7 +147,7 @@ const Game = ({socket,currentMessage}) => {
             // eslint-disable-next-line react/prop-types
             if(gameId) socket.current.send(JSON.stringify({type: "gameEnd", gameID: gameId}))
         };
-    }, []);
+    }, [gameId, socket]);
     return (
         <>
             {renderComponent()}

@@ -8,7 +8,7 @@ import {useEffect, useRef, useState} from "react";
 
 function App() {
     const [currentMessage, setCurrentMessage] = useState();
-    const url= `ws://${window.location.hostname}:8080`;
+    const url= `ws://${window.location.hostname}:8081`;
     const connectWebSocket = (url) => {
         const ws = new WebSocket(url);
 
@@ -36,7 +36,7 @@ function App() {
             <Routes>
                 <Route path={"/"} element={<Login socket={socket} currentMessage={currentMessage}/> } />
                 <Route path={"/register"} element={<Register socket={socket} currentMessage={currentMessage}/>} />
-                <Route path={"/game"} element={<Game socket={socket} currentMessage={currentMessage}/>} />
+                <Route path={"/game"} element={<Game socket={socket} currentMessage={currentMessage} setCurrentMessage={setCurrentMessage}/>} />
             </Routes>
         </BrowserRouter>
         )

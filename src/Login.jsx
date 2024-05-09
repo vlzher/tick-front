@@ -18,9 +18,14 @@ const Login = ({socket,currentMessage}) => {
             navigate("/game");
         }
         if(currentMessage.type === "connected"){
-            localStorage.setItem("accessToken", "");
-            localStorage.setItem("refreshToken", "");
-            localStorage.setItem("username", "")
+            const refreshToken = localStorage.getItem("refreshToken")
+            socket.current.send(JSON.stringify({
+                type: "refresh_token", refreshToken
+            }))
+        }
+        if(currentMessage.type === "refresh_success"){
+            localStorage.setItem("accessToken", currentMessage.accessToken)
+            navigate("/game")
         }
     }, [currentMessage]);
 
