@@ -14,7 +14,7 @@ export default defineConfig({
     host: true,
     proxy: {
       '/socket': {
-        target: 'ws://localhost:8081',
+        target: 'ws://backend:8081',
         changeOrigin: true,
         ws: true
       }
