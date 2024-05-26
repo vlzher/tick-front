@@ -8,8 +8,8 @@ import {useEffect, useRef, useState} from "react";
 
 function App() {
     const [currentMessage, setCurrentMessage] = useState();
-    // const url= `ws://${window.location.hostname}:8081`;
-    const url = `ws://${window.location.hostname}:5173/socket`;
+    const url= `ws://${window.location.hostname}:8081`;
+    // const url = `ws://${window.location.hostname}:5173/socket`;
     const connectWebSocket = (url) => {
         const ws = new WebSocket(url);
 

@@ -11,10 +11,12 @@ const Login = ({socket,currentMessage}) => {
         console.log(currentMessage);
         if(!currentMessage) return;
         if(currentMessage.type === "login_success"){
-            const {accessToken, refreshToken} = currentMessage;
+            console.log(currentMessage)
+            const {accessToken, refreshToken, photo} = currentMessage;
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
             localStorage.setItem("username", username)
+            localStorage.setItem("photo", photo)
             navigate("/game");
         }
         if(currentMessage.type === "connected"){

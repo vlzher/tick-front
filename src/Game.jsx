@@ -14,6 +14,7 @@ const Game = ({socket,currentMessage,setCurrentMessage}) => {
     const navigate = useNavigate();
     const [isMyMove, setIsMyMove] = useState(null);
     const [lastMessage, setLastMessage] = useState(null);
+    const image = localStorage.getItem("photo")
 
 
 
@@ -82,7 +83,8 @@ const Game = ({socket,currentMessage,setCurrentMessage}) => {
 
         if(result === 1 || result === 0 || result === -1) {
             const accessToken = localStorage.getItem("accessToken");
-            const message = JSON.stringify({type: "gameEnd", gameID: gameId, access_token: accessToken});
+            const username = localStorage.getItem("username");
+            const message = JSON.stringify({type: "gameEnd", gameID: gameId, username: username, result: result, access_token: accessToken});
             setLastMessage(message)
             socket.current.send(message)
             setIsX(null);
@@ -123,11 +125,17 @@ const Game = ({socket,currentMessage,setCurrentMessage}) => {
 
         </>)
         if (!gameId) return (<div>Loading...</div>)
-        return (<TickTackBoard board={board} handleClick={makeMove} isMyMove={isMyMove}/>)
+        return (
+            <>
+                <img src={image} width={200} height={200} alt={"bruh"}/>
+
+                <TickTackBoard board={board} handleClick={makeMove} isMyMove={isMyMove}/>
+            </>
+        )
     }
 
     useEffect(() => {
-        if(!currentMessage) return;
+        if (!currentMessage) return;
         switch (currentMessage.type){
             case 'gameStart':
                 setGameId(currentMessage.gameID);
