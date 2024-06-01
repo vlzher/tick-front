@@ -87,6 +87,11 @@ const Game = ({socket,currentMessage,setCurrentMessage}) => {
             const message = JSON.stringify({type: "gameEnd", gameID: gameId, username: username, result: result, access_token: accessToken});
             setLastMessage(message)
             socket.current.send(message)
+            if(result !== 0){
+                const isWin = result === 1;
+                const message1 = JSON.stringify({type: "updateRanking", user_id: username, isWin: isWin});
+                socket.current.send(message1)
+            }
             setIsX(null);
             setBoard(new Array(9).fill(-1))
             setGameId(null);
